@@ -1,0 +1,3 @@
+source: templates
+destination: compiled
+template: hello.html.twig

@@ -1,0 +1,15 @@
+{
+    "autoload": {
+        "psr-4": {
+            "DaSi\\TwigCli\\": "src/"
+        }
+    },
+    "require": {
+        "symfony/console": "^4.1",
+        "symfony/finder": "^4.1",
+        "symfony/filesystem": "^4.1",
+        "twig/twig": "^2.0",
+        "symfony/yaml": "^4.1",
+        "symfony/config": "^4.1"
+    }
+}
