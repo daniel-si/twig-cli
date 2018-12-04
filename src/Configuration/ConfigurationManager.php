@@ -40,4 +40,11 @@ class ConfigurationManager
 
         return $this->config['tasks'];
     }
+
+    private function loadTasks($config)
+    {
+        $tasks = $config['tasks'];
+        foreach (array_keys($tasks) as $key) {
+        }
+    }
 }
