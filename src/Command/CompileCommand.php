@@ -6,22 +6,20 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- *
  */
 
 /**
  * Created by PhpStorm.
  * User: daniel
  * Date: 10.11.18
- * Time: 11:47
+ * Time: 11:47.
  */
 
 namespace DaSi\TwigCli\Command;
 
 use DaSi\TwigCli\Compiler\Compiler;
 use DaSi\TwigCli\Configuration\ConfigurationManager;
-use \Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -37,7 +35,7 @@ class CompileCommand extends Command
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -45,13 +43,23 @@ class CompileCommand extends Command
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->configurationManager->loadConfiguration('project.yml');
-
         $compiler = new Compiler();
-        $compiler->compileTask($this->configurationManager->getTasks()[0]);
+
+        foreach ($this->configurationManager->getTasks() as $task) {
+            $output->write(sprintf('Compiling %s...', $task['template']));
+
+            $compiler->compile(
+                $task['source'],
+                $task['template'],
+                $task['destination']
+            );
+
+            $output->writeln(' Success.');
+        }
     }
 }

@@ -1,13 +1,6 @@
-defaults:
+default:
   source: templates
   destination: compiled
-
 tasks:
-  hello-zip:
+  hello:
     template: hello.html.twig
-    zip: true
-    include_images: false
-  hello-base64:
-    template: hello.html.twig
-    zip: false
-    include_images: true
