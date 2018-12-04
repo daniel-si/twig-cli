@@ -22,29 +22,64 @@ use Symfony\Component\Yaml\Yaml;
 
 class ConfigurationManager
 {
-    private $config = null;
+    private $tasks = null;
 
     public function loadConfiguration($filename)
     {
         $config = Yaml::parse(file_get_contents($filename));
 
         $processor = new Processor();
-        $this->config = $processor->processConfiguration(new TaskConfiguration(), array($config));
+        $config = $processor->processConfiguration(new TaskConfiguration(), array($config));
+        $this->tasks = $this->loadTasks($config);
     }
 
+    /**
+     * @return mixed
+     *
+     * @throws ConfigurationNotLoadedException
+     */
     public function getTasks()
     {
-        if (null === $this->config) {
+        if (null === $this->tasks) {
             throw new ConfigurationNotLoadedException();
         }
 
-        return $this->config['tasks'];
+        return $this->tasks;
     }
 
     private function loadTasks($config)
     {
         $tasks = $config['tasks'];
+        $defaults = $config['default'];
         foreach (array_keys($tasks) as $key) {
+            $tasks[$key] = $this->fillDefaultConfiguration($tasks[$key], array('source', 'destination'), $defaults);
         }
+
+        return $tasks;
+    }
+
+    /**
+     * @param $subject
+     * @param $keys
+     * @param $defaults
+     *
+     * @return mixed
+     *
+     * @throws ConfigurationMissingException
+     */
+    private function fillDefaultConfiguration($subject, $keys, $defaults)
+    {
+        foreach ($keys as $key) {
+            if (!isset($subject[$key])) {
+                if (!isset($defaults[$key])) {
+                    throw new ConfigurationMissingException(
+                        sprintf('Key %s is not defined and no default has been set.', $key));
+                }
+
+                $subject[$key] = $defaults[$key];
+            }
+        }
+
+        return $subject;
     }
 }
