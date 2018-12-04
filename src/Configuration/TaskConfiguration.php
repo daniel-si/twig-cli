@@ -6,8 +6,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- *
  */
 
 namespace DaSi\TwigCli\Configuration;
@@ -37,14 +35,15 @@ class TaskConfiguration implements ConfigurationInterface
                     ->isRequired()
                     ->requiresAtLeastOneElement()
                     ->prototype('array')
-                        ->scalarNode('template')
-                        ->scalarNode('source')
-                        ->end()
-                        ->scalarNode('destination')
-                        ->end()
-                        ->booleanNode('zip')
-                        ->end()
-                        ->booleanNode('include_images')
+                        ->children()
+                            ->scalarNode('template')
+                            ->end()
+                            ->scalarNode('source')
+                            ->end()
+                            ->scalarNode('destination')
+                            ->end()
+                            ->scalarNode('deploy')
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
